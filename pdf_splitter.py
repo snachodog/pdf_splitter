@@ -1,6 +1,6 @@
 import os
 import shutil
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 
 def split_pdf_pages(processed_folder):
     # Check if the processed folder exists in the current directory, if not, create it
@@ -12,15 +12,15 @@ def split_pdf_pages(processed_folder):
         if filename.endswith('.pdf'):
             # Read the PDF file
             with open(filename, 'rb') as infile:
-                reader = PdfFileReader(infile)
-                num_pages = reader.numPages
+                reader = PdfReader(infile)
+                num_pages = len(reader.pages)
                 
                 # Check if PDF has more than 1 page
                 if num_pages > 1:
                     # Split each page into a separate PDF
                     for i in range(num_pages):
-                        writer = PdfFileWriter()
-                        writer.addPage(reader.getPage(i))
+                        writer = PdfWriter()
+                        writer.add_page(reader.pages[i])
                         
                         # Generate new filename for the split PDF
                         split_filename = f"split_{i+1}_{filename}"
